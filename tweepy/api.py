@@ -107,6 +107,8 @@ class API(object):
 
     """ status/update_with_media """
     def update_status_with_media(self, filename, *args, **kargs):
+        if 'filename' in kargs:
+            del kargs['filename']
         headers, post_data = API._pack_media(filename, 3072)
         bind_api(
             path = '/statuses/update_with_media.json',
@@ -116,7 +118,7 @@ class API(object):
             require_auth = True,
             secure = True
         )(self, post_data=post_data, headers=headers,
-          status=kargs.get('status', ''))
+          **kargs)
 
     """ statuses/destroy """
     destroy_status = bind_api(
